@@ -24,6 +24,23 @@
     </dependencies>
 
     <build>
+		<finalName>stats-viewer</finalName>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.tomcat.maven</groupId>
+					<artifactId>tomcat7-maven-plugin</artifactId>
+					<version>2.2</version>
+					<configuration>
+					    <addContextWarDependencies>true</addContextWarDependencies> 
+						<port>8089</port> 
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
