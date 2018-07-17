@@ -40,6 +40,36 @@ function drawChart(input) {
   chart.draw(data, options);
 }
 
+//the expected json from backend:
+//  {"com.cellebrite.index.indexer.DumpIndexer": 99,"com.cellebrite.index.indexer.HashClassifier": 99}
+function drawBarChart(input) {
+
+	// Create the data table.
+	var data = new google.visualization.DataTable();
+	data.addColumn('string', 'Date');
+	data.addColumn('number', '-->');
+
+	for (var key in input){
+		var attrName = key;
+		var attrValue = input[key];
+		data.addRow( [attrName, attrValue] );
+	}
+
+
+	var options = {
+			title: 'Progress',
+			bar: {groupWidth: "10%"},
+			legend: { position: 'none' },
+			hAxis: {
+				minValue: 0,	
+				maxValue: 100	
+			}
+	};
+
+	var chart = new google.visualization.BarChart(document.getElementById('barchart_values'));
+	chart.draw(data, options);
+}
+
 
 
       
@@ -54,14 +84,15 @@ $(document).ready(function() {
 		};
 		
 		$.ajax({
-			url: "/MARS/Rest/System/data/ohads",
+			url: "http://localhost:8080/rest-api/status/getProgress",
 			data: requestData,
 			type: 'GET',
 			dataType: 'text',
 			contentType: 'application/json',
 			success: function(response, textStatus, jqXHR){
 				var marsStats = JSON.parse(response);
-				drawChart( marsStats );
+//				drawChart( marsStats );
+				drawBarChart( marsStats );
 			},
 			error: function(jqXHR, textStatus, errorThrown){
 				alert('error: ' + jqXHR + '; status: ' + status + '; errorThrown: ' + errorThrown);
