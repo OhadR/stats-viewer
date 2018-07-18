@@ -1,4 +1,4 @@
-//setInterval(getMarsRealtimeStats, (3 * 1000));
+var intervalObj = setInterval(callBackend, (1 * 1000));
 
 // Load the Visualization API and the corechart package.
 google.charts.load('current', {'packages':['corechart']});
@@ -77,27 +77,36 @@ $(document).ready(function() {
 				
 	$("#submit").click(function(){
 		
-		var items = {};
-		
-		var requestData = {
-			numSamples: 30
-		};
-		
-		$.ajax({
-			url: "http://localhost:8080/rest-api/status/getProgress",
-			data: requestData,
-			type: 'GET',
-			dataType: 'text',
-			contentType: 'application/json',
-			success: function(response, textStatus, jqXHR){
-				var marsStats = JSON.parse(response);
-//				drawChart( marsStats );
-				drawBarChart( marsStats );
-			},
-			error: function(jqXHR, textStatus, errorThrown){
-				alert('error: ' + jqXHR + '; status: ' + status + '; errorThrown: ' + errorThrown);
-			}
-		});
+		callBackend()
 	});
-
 });
+
+function callBackend()
+{
+	var items = {};
+	
+	var requestData = {
+		numSamples: 30
+	};
+	
+	$.ajax({
+		url: "http://localhost:8080/rest-api/status/getProgress",
+		data: requestData,
+		type: 'GET',
+		dataType: 'text',
+		contentType: 'application/json',
+		success: function(response, textStatus, jqXHR){
+			var marsStats = JSON.parse(response);
+//			drawChart( marsStats );
+			drawBarChart( marsStats );
+		},
+		error: function(jqXHR, textStatus, errorThrown){
+			alert('error: ' + jqXHR + '; status: ' + status + '; errorThrown: ' + errorThrown);
+		}
+	});
+}
+
+function stopInterval()
+{
+	window.clearInterval( intervalObj );
+}
