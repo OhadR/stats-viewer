@@ -1,4 +1,5 @@
-var intervalObj = setInterval(callBackend, (1 * 1000));
+//var intervalObj = setInterval(callBackend, (1 * 1000));
+var intervalOb;
 
 // Load the Visualization API and the corechart package.
 google.charts.load('current', {'packages':['corechart']});
@@ -77,7 +78,8 @@ $(document).ready(function() {
 				
 	$("#submit").click(function(){
 		
-		callBackend()
+//		callBackend()
+		intervalObj = setInterval(callBackend, (1 * 1000));
 	});
 });
 
