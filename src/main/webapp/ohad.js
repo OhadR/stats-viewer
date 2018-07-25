@@ -91,8 +91,11 @@ function callBackend()
 		numSamples: 30
 	};
 	
+	var serverName = $('#server_name').val();
+
 	$.ajax({
-		url: "http://localhost:8080/rest-api/status/getProgress",
+//		url: "http://localhost:8080/rest-api/status/getProgress",
+		url: "https://" + serverName + "/rest-api/status/getProgress",
 		data: requestData,
 		type: 'GET',
 		dataType: 'text',
