@@ -101,10 +101,11 @@ function callBackend()
 	};
 	
 	var serverName = $('#server_name').val();
-
+	var serverPort = $('#server_port').val();
+	var serverAddress = serverName + ':' + serverPort;
+	
 	$.ajax({
-//		url: "http://localhost:8080/rest-api/status/getProgress",
-		url: "https://" + serverName + "/rest-api/status/getProgress",
+		url: "http://" + serverAddress + "/rest-api/status/getProgress",
 		data: requestData,
 		type: 'GET',
 		dataType: 'text',
@@ -118,7 +119,7 @@ function callBackend()
 		error: function(jqXHR, textStatus, errorThrown){
 			++counter;
 			if(counter % 15 == 0)
-				alert('error attempting to reach server ' + serverName + ', counter=' + counter);
+				alert('error attempting to reach ' + serverAddress + ', counter=' + counter);
 		}
 	});
 }
