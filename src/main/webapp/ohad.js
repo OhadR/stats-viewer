@@ -7,6 +7,7 @@ google.charts.load('current', {'packages':['corechart']});
 // Set a callback to run when the Google Visualization API is loaded.
 //google.charts.setOnLoadCallback(drawChart);
 
+var counter = 0;
 
 
 // Callback that creates and populates a data table,
@@ -104,9 +105,12 @@ function callBackend()
 			var marsStats = JSON.parse(response);
 //			drawChart( marsStats );
 			drawBarChart( marsStats );
+			counter = 0;
 		},
 		error: function(jqXHR, textStatus, errorThrown){
-			alert('error: ' + jqXHR + '; status: ' + status + '; errorThrown: ' + errorThrown);
+			++counter;
+			if(counter % 15 == 0)
+				alert('error attempting to reach server ' + serverName + ', counter=' + counter);
 		}
 	});
 }
