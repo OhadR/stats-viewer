@@ -42,19 +42,27 @@ function drawChart(input) {
   chart.draw(data, options);
 }
 
-//the expected json from backend:
+
+//OLD: the expected json from backend:
 //  {"com.cellebrite.index.indexer.DumpIndexer": 99,"com.cellebrite.index.indexer.HashClassifier": 99}
+//the expected json from backend:
+//
 function drawBarChart(input) {
 
 	// Create the data table.
 	var data = new google.visualization.DataTable();
 	data.addColumn('string', 'Date');
 	data.addColumn('number', '-->');
+    data.addColumn({type: 'string', role:'style'});
 
 	for (var key in input){
-		var attrName = key;
-		var attrValue = input[key];
-		data.addRow( [attrName, attrValue] );
+		var attrName = input[key].jobDao.name + ' ' + input[key].taskName + ' ' + key;
+		var attrValue = input[key].progressPercentage;
+		var status = input[key].jobDao.status;
+		if(status === 'Finished')
+			data.addRow( [attrName, attrValue, 'color: #fc0000'] );//red
+		else
+			data.addRow( [attrName, attrValue, 'color: #0ac900'] );//green
 	}
 
 
