@@ -56,7 +56,7 @@ function drawBarChart(input) {
     data.addColumn({type: 'string', role:'style'});
 
 	for (var key in input){
-		var attrName = input[key].jobDao.name + ' ' + input[key].taskName + ' ' + key;
+		var attrName = input[key].taskName + ' ' + ' ' + key;
 		var attrValue = input[key].progressPercentage;
 		var status = input[key].jobDao.status;
 		if(status === 'Finished')
