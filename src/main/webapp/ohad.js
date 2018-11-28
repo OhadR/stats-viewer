@@ -110,8 +110,8 @@ function callBackend()
 	var serverName = $('#server_name').val();
 	var serverPort = $('#server_port').val();
 	serverAddress += serverName;
-	if(!serverPort)		//checks null, undefuned and empty string (tnx @Slava!)
-		serverAddress += ':' + serverPort;
+//	if(!serverPort)		//checks null, undefuned and empty string (tnx @Slava!)
+	serverAddress += ':' + serverPort;		//if 'port' is empty it does not harm (http://host:/rest.. is OK
 	
 	$.ajax({
 		url: serverAddress + "/rest-api/status/getProgress",
