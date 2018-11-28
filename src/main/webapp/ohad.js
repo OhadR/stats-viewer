@@ -100,7 +100,7 @@ function callBackend()
 		numSamples: 30
 	};
 	
-	var isSecured = $('#server_secured').val();		//is https (o/w http)
+	var isSecured = $('#server_secured').is(":checked");		//is https (o/w http)
 	var serverAddress;
 	if(isSecured)
 		serverAddress = "https://";
