@@ -100,12 +100,21 @@ function callBackend()
 		numSamples: 30
 	};
 	
+	var isSecured = $('#server_secured').val();		//is https (o/w http)
+	var serverAddress;
+	if(isSecured)
+		serverAddress = "https://";
+	else
+		serverAddress = "http://";
+	
 	var serverName = $('#server_name').val();
 	var serverPort = $('#server_port').val();
-	var serverAddress = serverName + ':' + serverPort;
+	serverAddress += serverName;
+	if(!serverPort)		//checks null, undefuned and empty string (tnx @Slava!)
+		serverAddress += ':' + serverPort;
 	
 	$.ajax({
-		url: "http://" + serverAddress + "/rest-api/status/getProgress",
+		url: serverAddress + "/rest-api/status/getProgress",
 		data: requestData,
 		type: 'GET',
 		dataType: 'text',
