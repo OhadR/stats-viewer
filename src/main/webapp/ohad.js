@@ -201,11 +201,30 @@ function drawTable()
     mongoClusterTable.draw(mongoClusterData, {showRowNumber: true, width: '100%', height: '100%'});
 }
 
+/*
+ * the json is in this format:
+ * [{"address":{"host":"localhost","port":27017,"socketAddress":{"address":"localhost","hostName":"localhost","port":27017,"unresolved":false,"hostString":"localhost"}},"type":"SHARD_ROUTER","state":"CONNECTED"}]
+ */
 function updateMongoClusterStatus(clusterStatus) {
-	for (var server in clusterStatus){
-		var x = mongoClusterData.getFilteredRows([{column: 0, value: 'uae-dev-moshe1'}]);
-		var rowIndex = x[0];	//expect a single row with this server name;
-		mongoClusterData.setCell(rowIndex, 1, ++counter + '');
+
+	for (var i in clusterStatus)
+	{
+		var node = clusterStatus[i];
+		var nodeAddress = node.address.host + ":" + node.address.port;
+		//find the node in the table:
+		var rows = mongoClusterData.getFilteredRows([{column: 0, value: nodeAddress}]);
+		if(rows.length !== 0) //if we did not find by filter, create a new row
+		{
+			var rowIndex = rows[0];	//expect a single row with this server name;
+			mongoClusterData.setCell(rowIndex, 1, node.state);
+			mongoClusterData.setCell(rowIndex, 2, node.type);
+		}
+		else
+		{
+		    mongoClusterData.addRows([
+		        [nodeAddress, node.state, node.type]
+		    ]);
+		}
 	    mongoClusterTable.draw(mongoClusterData, {showRowNumber: true});
 
 	}
