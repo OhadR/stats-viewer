@@ -95,6 +95,12 @@ $(document).ready(function() {
 	});
 });
 
+function callBackend()
+{
+	callBackendGetJobProgress();
+	callBackendGetMongoClusterStatus();
+}
+
 function getServerAddress()
 {
 	var serverAddress;
@@ -110,12 +116,6 @@ function getServerAddress()
 //	if(!serverPort)		//checks null, undefuned and empty string (tnx @Slava!)
 	serverAddress += ':' + serverPort;		//if 'port' is empty it does not harm (http://host:/rest.. is OK
 	return serverAddress;
-}
-
-function callBackend()
-{
-	callBackendGetJobProgress();
-	callBackendGetMongoClusterStatus();
 }
 
 function callBackendGetJobProgress()
