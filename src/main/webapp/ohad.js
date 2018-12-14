@@ -1,5 +1,5 @@
-//var intervalObj = setInterval(callBackend, (1 * 1000));
-var intervalOb;
+//var intervalObj = setInterval(callBackendGetJobProgress, (1 * 1000));
+var intervalObj;
 
 // Load the Visualization API and the corechart package.
 google.charts.load('current', {'packages':['corechart']});
@@ -87,21 +87,15 @@ $(document).ready(function() {
 				
 	$("#submit").click(function(){
 		
-//		callBackend()
-		intervalObj = setInterval(callBackend, (1 * 1000));
+//		callBackendGetJobProgress()
+		intervalObj = setInterval(callBackendGetJobProgress, (1 * 1000));
 	});
 });
 
-function callBackend()
+function getServerAddress()
 {
-	var items = {};
-	
-	var requestData = {
-		numSamples: 30
-	};
-	
-	var isSecured = $('#server_secured').is(":checked");		//is https (o/w http)
 	var serverAddress;
+	var isSecured = $('#server_secured').is(":checked");		//is https (o/w http)
 	if(isSecured)
 		serverAddress = "https://";
 	else
@@ -112,6 +106,16 @@ function callBackend()
 	serverAddress += serverName;
 //	if(!serverPort)		//checks null, undefuned and empty string (tnx @Slava!)
 	serverAddress += ':' + serverPort;		//if 'port' is empty it does not harm (http://host:/rest.. is OK
+	return serverAddress;
+}
+
+function callBackendGetJobProgress()
+{
+	var requestData = {
+		numSamples: 30
+	};
+	
+	var serverAddress = getServerAddress();
 	
 	$.ajax({
 		url: serverAddress + "/rest-api/status/getProgress",
@@ -132,6 +136,7 @@ function callBackend()
 		}
 	});
 }
+
 
 function stopInterval()
 {
