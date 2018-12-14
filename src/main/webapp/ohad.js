@@ -180,6 +180,7 @@ function initMongoClusterStatusTable()
 //    mongoClusterData.addColumn('boolean', 'Primary');
     mongoClusterData.addColumn('string', 'Primary');
 
+    //add a row for the keep-alive-counter:
     mongoClusterData.addRows([
         ['counter', keepAliveCounter + '', '']
     ]);
