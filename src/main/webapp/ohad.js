@@ -12,6 +12,7 @@ google.charts.load('current', {'packages':['table']});
 var counter = 0;
 var mongoClusterData;
 var mongoClusterTable;
+var keepAliveCounter = 0;
 
 // Callback that creates and populates a data table,
 // instantiates the pie chart, passes in the data and
@@ -179,27 +180,14 @@ function initMongoClusterStatusTable()
 //    mongoClusterData.addColumn('boolean', 'Primary');
     mongoClusterData.addColumn('string', 'Primary');
 
-    mongoClusterTable = new google.visualization.Table(document.getElementById('cluster_status_table_div'));
-    mongoClusterTable.draw(mongoClusterData, {showRowNumber: true, width: '100%', height: '100%'});
-}
-
-function drawTable() 
-{
-    mongoClusterData = new google.visualization.DataTable();
-    mongoClusterData.addColumn('string', 'Name');
-    mongoClusterData.addColumn('string', 'Status');
-    mongoClusterData.addColumn('boolean', 'Primary');
     mongoClusterData.addRows([
-      ['uae-dev-moshe1', 'connected', false],
-      ['uae-dev-moshe2', 'connected',  false],
-      ['uae-dev-moshe3', 'connected', true],
-      ['uae-dev-moshe4', 'connected',  false]
+        ['counter', keepAliveCounter + '', '']
     ]);
 
     mongoClusterTable = new google.visualization.Table(document.getElementById('cluster_status_table_div'));
-
     mongoClusterTable.draw(mongoClusterData, {showRowNumber: true, width: '100%', height: '100%'});
 }
+
 
 /*
  * the json is in this format:
@@ -225,7 +213,13 @@ function updateMongoClusterStatus(clusterStatus) {
 		        [nodeAddress, node.state, node.type]
 		    ]);
 		}
-	    mongoClusterTable.draw(mongoClusterData, {showRowNumber: true});
+
+		//update the keep-alive counter:
+		++keepAliveCounter;
+		rows = mongoClusterData.getFilteredRows([{column: 0, value: 'counter'}]);
+		mongoClusterData.setCell(rows[0], 1, keepAliveCounter + '');
+
+		mongoClusterTable.draw(mongoClusterData, {showRowNumber: true});
 
 	}
 }
