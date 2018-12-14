@@ -176,7 +176,8 @@ function initMongoClusterStatusTable()
     mongoClusterData = new google.visualization.DataTable();
     mongoClusterData.addColumn('string', 'Name');
     mongoClusterData.addColumn('string', 'Status');
-    mongoClusterData.addColumn('boolean', 'Primary');
+//    mongoClusterData.addColumn('boolean', 'Primary');
+    mongoClusterData.addColumn('string', 'Primary');
 
     mongoClusterTable = new google.visualization.Table(document.getElementById('cluster_status_table_div'));
     mongoClusterTable.draw(mongoClusterData, {showRowNumber: true, width: '100%', height: '100%'});
