@@ -157,8 +157,8 @@ function callBackendGetMongoClusterStatus()
 		dataType: 'text',
 		contentType: 'application/json',
 		success: function(response, textStatus, jqXHR){
-			var clusterStatus = JSON.parse(response);
-			updateMongoClusterStatus( clusterStatus );
+			var clusterStatusResponse = JSON.parse(response);
+			updateMongoClusterStatus( clusterStatusResponse );
 			counter = 0;
 		},
 		error: function(jqXHR, textStatus, errorThrown){
@@ -194,8 +194,9 @@ function initMongoClusterStatusTable()
  * the json is in this format:
  * [{"address":{"host":"localhost","port":27017,"socketAddress":{"address":"localhost","hostName":"localhost","port":27017,"unresolved":false,"hostString":"localhost"}},"type":"SHARD_ROUTER","state":"CONNECTED"}]
  */
-function updateMongoClusterStatus(clusterStatus) {
+function updateMongoClusterStatus(clusterStatusResponse) {
 
+	var clusterStatus = clusterStatusResponse.mongoNodes;
 	for (var i in clusterStatus)
 	{
 		var node = clusterStatus[i];
