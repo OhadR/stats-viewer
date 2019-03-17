@@ -14,3 +14,8 @@ As mentioned, this is a web application, so it should be deployed on a servlet c
 The easiest way is to use tomcat-maven-plugin, by 
     
     ...>mvn tomcat7:run
+
+    
+## Application Screenshot
+
+![screenshot](/app-screenshot.JPG)
