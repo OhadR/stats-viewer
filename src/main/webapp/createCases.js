@@ -146,19 +146,20 @@ function login()
 function createCasesHandler()
 {
     var numCasesToCreate = $("#num_cases_to_create").val();
+	let caseName = Math.random().toString(36).substring(2, 7);
     
 	for(i=0; i < numCasesToCreate; ++i)
 	{
-		createCaseProcess();
+		createCaseProcess(caseName + '-' + i);
 	}
 }
 
-function createCaseProcess()
+function createCaseProcess(caseName)
 {
-	discoverExtraction();
+	discoverExtraction(caseName);
 }
 
-function discoverExtraction()
+function discoverExtraction(caseName)
 {
     $.ajax({
 		url: DISCO_EXTRACTION,
@@ -171,7 +172,7 @@ function discoverExtraction()
         },
         success: function(response, textStatus, jqXHR){
             var discoverExtractionsResponse = JSON.parse(response);
-           	createCase(discoverExtractionsResponse);
+           	createCase(discoverExtractionsResponse, caseName);
         },
         error: function(jqXHR, textStatus, errorThrown){
             alert('error discoverExtraction: ' + textStatus)
@@ -180,9 +181,8 @@ function discoverExtraction()
 }
 
 
-function createCase(discoverExtractionsResponse)
+function createCase(discoverExtractionsResponse, caseName)
 {
-	let caseName = Math.random().toString(36).substring(2, 7);
 	var ownerId = discoverExtractionsResponse.extractions[0].ownerId;
 
     createCaseRequestData.entities[0].name = 
@@ -202,6 +202,7 @@ function createCase(discoverExtractionsResponse)
             var parseResponse = JSON.parse(response);
             if(parseResponse.hasErrors === false)
             {
+            	console.log('case ' + caseName + ' created suXessfully. id = ' + parseResponse.entities[0].id);
             	assignUserToCase(parseResponse);
             }
             else
@@ -233,7 +234,7 @@ function assignUserToCase(caseObj)
             var parseResponse = JSON.parse(response);
             if(parseResponse.hasErrors === false)
             {
-            	console.log('user assigned to case ' + caseId);
+            	console.log('user assigned to case ' + caseName);
             }
             else
             {
