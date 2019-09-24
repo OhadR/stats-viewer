@@ -1,8 +1,9 @@
-var SERVER_ADDRESS = 'http://localhost:8080/rest-api';
-var LOGIN_URL = SERVER_ADDRESS + '/login';
-var CASE = SERVER_ADDRESS + '/case';
-var ASSIGN_USER_TO_CASE = SERVER_ADDRESS + '/privilege';
+var LOGIN_URL = '/rest-api/login';
+var CASE = '/rest-api/case';
+var ASSIGN_USER_TO_CASE = '/rest-api/privilege';
 var DISCO_EXTRACTION = CASE + '/discoverExtractions/';
+
+var serverAddress;
 
 $(document).ready(function() {
 	$("#submit").click(function(){
@@ -145,6 +146,7 @@ function login()
 
 function createCasesHandler()
 {
+	serverAddress = getServerAddress();
     var numCasesToCreate = $("#num_cases_to_create").val();
 	let caseName = Math.random().toString(36).substring(2, 7);
     
@@ -162,7 +164,7 @@ function createCaseProcess(caseName)
 function discoverExtraction(caseName)
 {
     $.ajax({
-		url: DISCO_EXTRACTION,
+		url: serverAddress + DISCO_EXTRACTION,
         type: 'POST',
         data: JSON.stringify(discoverExtractionRequestData),
         dataType: 'text',    //The type of data that you're expecting back from the server
@@ -190,7 +192,7 @@ function createCase(discoverExtractionsResponse, caseName)
     createCaseRequestData.entities[0].extractions.ownerId = ownerId; 
 
     $.ajax({
-		url: CASE,
+		url: serverAddress + CASE,
         type: 'POST',
         data: JSON.stringify(createCaseRequestData),
         dataType: 'text',    //The type of data that you're expecting back from the server
@@ -219,10 +221,11 @@ function createCase(discoverExtractionsResponse, caseName)
 function assignUserToCase(caseObj)
 {
 	var caseId = caseObj.entities[0].id;
+	var caseName = caseObj.entities[0].name;
 
 	caseAssignmentRequestData.entities[0].entityId = caseId;
     $.ajax({
-		url: ASSIGN_USER_TO_CASE,
+		url: serverAddress + ASSIGN_USER_TO_CASE,
         type: 'POST',
         data: JSON.stringify(caseAssignmentRequestData),
         dataType: 'text',    //The type of data that you're expecting back from the server
