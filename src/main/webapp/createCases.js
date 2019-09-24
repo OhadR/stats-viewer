@@ -105,10 +105,12 @@ function login()
 
 function createCases()
 {
+	let caseName = Math.random().toString(36).substring(2, 7);
+
     var distanceKM = $("#distance").val();
     
     createCaseRequestData.entities[0].name = 
-    createCaseRequestData.entities[0].number = 'ohad4';
+    createCaseRequestData.entities[0].number = caseName;
 
     $.ajax({
 		url: CREATE_CASE,
@@ -154,7 +156,7 @@ function assignUserToCase(caseObj)
             var parseResponse = JSON.parse(response);
             if(parseResponse.hasErrors === false)
             {
-            	assignUserToCase(parseResponse);
+            	console.log('user assigned to case ' + caseId);
             }
             else
             {
