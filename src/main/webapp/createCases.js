@@ -3,6 +3,8 @@ var CASE = '/rest-api/case';
 var ASSIGN_USER_TO_CASE = '/rest-api/privilege';
 var DISCO_EXTRACTION = CASE + '/discoverExtractions/';
 
+var CONNOR_PATH = "\\\\qaforensic-lab/qaforensic-lab/UAE/Scipts and Demos/Terrorism/Old Trafford Bombing/Extractions/Connor.ufdr";
+
 var serverAddress;
 
 $(document).ready(function() {
@@ -13,7 +15,7 @@ $(document).ready(function() {
 
 var discoverExtractionRequestData = 
 {
-	"path": "D:/evidences/Old Trafford Bombing/Extractions/Connor.ufdr",
+	"path": CONNOR_PATH,
 	"fileTypes": {
 		"zip": true,
 		"dd": true,
@@ -66,16 +68,16 @@ var createCaseRequestData =
         "watchlists": null,
         "adhoc-watchlists": null,
         "path": [
-            "D:/evidences/Old Trafford Bombing/Extractions/Connor.ufdr"
+        	CONNOR_PATH
         ]
       },
       "extractions": [
           {
               "type": "extraction",
               "ownerId": "b894b927-5e4a-48f3-8c7f-bcde89b52bf9",
-              "ufd": "D:\\evidences\\Old Trafford Bombing\\Extractions\\Connor.ufdr",
+              "ufd": CONNOR_PATH,
               "category": "Mobile",
-              "mainPath": "D:/evidences/Old Trafford Bombing/Extractions/Connor.ufdr"
+              "mainPath": CONNOR_PATH
             }
       ],
       "extractionsOwners": {
@@ -209,6 +211,7 @@ function createCase(discoverExtractionsResponse, caseName)
             }
             else
             {
+            	console.log('error creating case ' + caseName + ': ' + parseResponse.entities[0].error.message);
                 alert('error creating case: ' + parseResponse.entities[0].error.message)
             }
         },
