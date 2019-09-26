@@ -23,6 +23,14 @@ The easiest way is to use tomcat-maven-plugin, by
 See how in this README: https://gitlab.com/OhadR/activemq-spring-sandbox#debug-within-eclipse
 
     
+# Mass creation of cases (+ user assignment)
+
+the flow: first generate case name prefix. it will be the prefix for all cases, and the suffix is the counter. example for case
+name is: X0df1_1. 'X0df1' is the prefix. we also use this prefix for the new-created user, which its name is 'user_X0df1'.
+after we generate this String, we create the user. If the action is successful, we start a loop to create the cases, and for each case 
+we assign the user that was created. So the user is unique for this test. Each test has its own user. 
+
+
 # Application Screenshot
 
 ![screenshot](/app-screenshot.JPG)

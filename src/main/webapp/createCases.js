@@ -2,16 +2,37 @@ var LOGIN_URL = '/rest-api/login';
 var CASE = '/rest-api/case';
 var ASSIGN_USER_TO_CASE = '/rest-api/privilege';
 var DISCO_EXTRACTION = CASE + '/discoverExtractions/';
+var USER = '/rest-api/user';
 
 var CONNOR_PATH = "\\\\qaforensic-lab/qaforensic-lab/UAE/Scipts and Demos/Terrorism/Old Trafford Bombing/Extractions/Connor.ufdr";
 
 var serverAddress;
+var username; 
 
 $(document).ready(function() {
 	$("#submit").click(function(){
 		
 	});
 });
+
+
+var createUserRequestData = 
+{
+	"entities": [
+	{
+	  fullName: "placeholder",
+	  firstName: "placeholder",
+	  lastName: "placeholder",
+	  username: "placeholder",
+	  "email": "X@X.COM",
+	  "password": "Ohads111!",
+	  "isDisabled": "false",
+	  "role": "1",
+	  "isEnabled": true,
+	  "confirmPassword": "Ohads111!",
+	  "type": "user"
+	}]
+}
 
 var discoverExtractionRequestData = 
 {
@@ -104,15 +125,15 @@ var caseAssignmentRequestData =
 	    {
 	      "type": "privilege",
 	      "error": null,
-	      "name": "ohads",
-	      "email": "a@b.com",
+	      "name": "placeholder",
+		  "email": "placeholder",
 	      "firstName": "ohads",
 	      "lastName": "redred",
 	      "fullName": "ohads redred",
 	      "isNew": true,
 	      "isDeleted": false,
 	      "role": "INVESTIGATOR",
-	      "entityId": "b46a9fde-b5a4-41f4-aa7a-5cdaaf7ac3fd",
+	      "entityId": "placeholder",
 	      "entityType": "case"
 	    }
 	]
@@ -146,12 +167,22 @@ function login()
 	});
 }
 
+/**
+ * the flow: first generate case name prefix. it will be the prefix for all cases, and the suffix is the counter. example for case
+ * name is: X0df1_1. 'X0df1' is the prefix. we also use this prefix for the new-created user, which its name is 'user_X0df1'.
+ * after we generate this String, we create the user. If the action is successful, we start a loop to create the cases, and for each case 
+ * we assign the user that was created. So the user is unique for this test. Each test has its own user. 
+ * @returns
+ */
 function createCasesHandler()
 {
 	serverAddress = getServerAddress();
     var numCasesToCreate = $("#num_cases_to_create").val();
 	let caseName = Math.random().toString(36).substring(2, 7);
     
+	username = 'user_' + caseName;
+	createUser(username);
+	
 	for(i=0; i < numCasesToCreate; ++i)
 	{
 		createCaseProcess(caseName + '-' + i);
@@ -161,6 +192,32 @@ function createCasesHandler()
 function createCaseProcess(caseName)
 {
 	discoverExtraction(caseName);
+}
+
+function createUser(userName)
+{
+	createUserRequestData.entities[0].username = userName; 
+	createUserRequestData.entities[0].fullName = userName; 
+	createUserRequestData.entities[0].firstName = userName; 
+	createUserRequestData.entities[0].lastName = userName; 
+
+    $.ajax({
+		url: serverAddress + USER,
+        type: 'POST',
+        data: JSON.stringify(createUserRequestData),
+        dataType: 'text',    //The type of data that you're expecting back from the server
+        contentType: 'application/json',    //When sending data to the server, use this content type
+        xhrFields: {
+            withCredentials: true
+        },
+        success: function(response, textStatus, jqXHR){
+            var createUserResponse = JSON.parse(response);
+           	console.log('user was created.' + createUserResponse);
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            alert('error creating user: ' + textStatus)
+        }
+    });
 }
 
 function discoverExtraction(caseName)
@@ -227,6 +284,8 @@ function assignUserToCase(caseObj)
 	var caseName = caseObj.entities[0].name;
 
 	caseAssignmentRequestData.entities[0].entityId = caseId;
+	caseAssignmentRequestData.entities[0].name = username;
+	
     $.ajax({
 		url: serverAddress + ASSIGN_USER_TO_CASE,
         type: 'POST',
@@ -248,7 +307,8 @@ function assignUserToCase(caseObj)
             }
         },
         error: function(jqXHR, textStatus, errorThrown){
-            alert('error assigning user to case: ' + textStatus)
+        	console.error(jqXHR.responseText);
+        	console.error('error assigning user to case.')
         }
     });
 
