@@ -1,7 +1,6 @@
 var LOGIN_URL = '/rest-api/login';
 var CASE = '/rest-api/case';
 var ASSIGN_USER_TO_CASE = '/rest-api/privilege';
-var DISCO_EXTRACTION = CASE + '/discoverExtractions/';
 var USER = '/rest-api/user';
 
 var CONNOR_PATH = "\\\\qaforensic-lab/qaforensic-lab/UAE/Scipts and Demos/Terrorism/Old Trafford Bombing/Extractions/Connor.ufdr";
@@ -34,26 +33,6 @@ var createUserRequestData =
 	}]
 }
 
-var discoverExtractionRequestData = 
-{
-	"path": CONNOR_PATH,
-	"fileTypes": {
-		"zip": true,
-		"dd": true,
-		"txt": true,
-		"001": true,
-		"img": true,
-		"ufd": true,
-		"tar": true,
-		"xml": true,
-		"csv": true,
-		"e01": true,
-		"ufdr": true,
-		"xls": true
-	},
-	"caseId": null
-}
-
 var createCaseRequestData = 
 {
 	entities: [
@@ -63,58 +42,17 @@ var createCaseRequestData =
         "autoIndex": true,
         "publicPersons": false,
         "ownerMergeEnabled": false,
-        "showTranslations": true,
         "parseDocuments": false,
         "parseUncategorizedDocuments": false,
         "paths": [
           "C:\\Program Files\\Cellebrite Mobile Synchronization\\UFED Analytics Server\\DataDir\\Extractions"
         ],
-        mediaCategories: [
-          "Face"
-        ],
-        caseCreationFileTypes: {
-          "dd": true,
-          "zip": true,
-          "txt": true,
-          "001": true,
-          "img": true,
-          "ufd": true,
-          "tar": true,
-          "xml": true,
-          "csv": true,
-          "e01": true,
-          "ufdr": true,
-          "xls": true
-        },
-        "watchlists": null,
-        "adhoc-watchlists": null,
-        "path": [
-        	CONNOR_PATH
-        ]
-      },
-      "extractions": [
-          {
-              "type": "extraction",
-              "ownerId": "b894b927-5e4a-48f3-8c7f-bcde89b52bf9",
-              "ufd": CONNOR_PATH,
-              "category": "Mobile",
-              "mainPath": CONNOR_PATH
-            }
-      ],
-      "extractionsOwners": {
-          "b894b927-5e4a-48f3-8c7f-bcde89b52bf9": {
-              "id": "b894b927-5e4a-48f3-8c7f-bcde89b52bf9",
-              "type": "extractionOwner",
-              "isExpanded": true,
-              "name": "Person 1",
-              "color": "#98a5ab",
-              "keepName": false
-            }
+        mediaCategories: [ "Face" ],
+        "path": [ CONNOR_PATH ]
       },
       "creationDate": "2019-09-15T14:40:46.165Z",
       "status": "0",
       "name": "testApi2",
-      "number": "TestNumber2"
     }
   ]
 };
@@ -191,7 +129,7 @@ function createCasesHandler()
 
 function createCaseProcess(caseName)
 {
-	discoverExtraction(caseName);
+	createCase(caseName);
 }
 
 function createUser(userName)
@@ -220,35 +158,10 @@ function createUser(userName)
     });
 }
 
-function discoverExtraction(caseName)
+function createCase(caseName)
 {
-    $.ajax({
-		url: serverAddress + DISCO_EXTRACTION,
-        type: 'POST',
-        data: JSON.stringify(discoverExtractionRequestData),
-        dataType: 'text',    //The type of data that you're expecting back from the server
-        contentType: 'application/json',    //When sending data to the server, use this content type
-        xhrFields: {
-            withCredentials: true
-        },
-        success: function(response, textStatus, jqXHR){
-            var discoverExtractionsResponse = JSON.parse(response);
-           	createCase(discoverExtractionsResponse, caseName);
-        },
-        error: function(jqXHR, textStatus, errorThrown){
-            alert('error discoverExtraction: ' + textStatus)
-        }
-    });
-}
-
-
-function createCase(discoverExtractionsResponse, caseName)
-{
-	var ownerId = discoverExtractionsResponse.extractions[0].ownerId;
-
     createCaseRequestData.entities[0].name = 
     createCaseRequestData.entities[0].number = caseName;
-    createCaseRequestData.entities[0].extractions.ownerId = ownerId; 
 
     $.ajax({
 		url: serverAddress + CASE,
