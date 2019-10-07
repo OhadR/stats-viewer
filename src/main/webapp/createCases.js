@@ -236,6 +236,7 @@ function discoverExtraction(caseName)
            	createCase(discoverExtractionsResponse, caseName);
         },
         error: function(jqXHR, textStatus, errorThrown){
+        	console.log('error discoverExtraction: ' + textStatus);
             alert('error discoverExtraction: ' + textStatus)
         }
     });
